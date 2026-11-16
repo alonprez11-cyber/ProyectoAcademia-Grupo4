@@ -1,6 +1,6 @@
 Proyecto Grupal de Academia
 
 Realizado por:
-Alonso
-Mireia
+Alonso,
+Mireia,
 Manuel Jesús
