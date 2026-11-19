@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Inicio')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: cabecera('inicio')}"></header>
+
+<main class="contenedor">
+    <div th:replace="~{fragments/layout :: avisos}"></div>
+
+    <h1>Gestión de la academia</h1>
+    <p class="intro">Elige qué quieres gestionar.</p>
+
+    <div class="areas">
+        <section>
+            <h2>Alumnado</h2>
+            <ul class="enlaces">
+                <li><a th:href="@{/alumnos}">Alumnos</a><span>Datos personales de cada alumno</span></li>
+                <li><a th:href="@{/matriculas}">Matrículas</a><span>Qué alumno cursa qué curso</span></li>
+                <li><a th:href="@{/pagos}">Pagos</a><span>Cobros asociados a cada matrícula</span></li>
+            </ul>
+        </section>
+        <section>
+            <h2>Oferta formativa</h2>
+            <ul class="enlaces">
+                <li><a th:href="@{/cursos}">Cursos</a><span>Cursos, horas y precio</span></li>
+                <li><a th:href="@{/profesores}">Profesores</a><span>Profesorado y su fotografía</span></li>
+                <li><a th:href="@{/aulas}">Aulas</a><span>Espacios y capacidad</span></li>
+            </ul>
+        </section>
+        <section>
+            <h2>Evaluación y documentos</h2>
+            <ul class="enlaces">
+                <li><a th:href="@{/examenes}">Exámenes</a><span>Convocatorias por curso</span></li>
+                <li><a th:href="@{/evaluaciones}">Evaluaciones</a><span>Notas de cada matrícula</span></li>
+                <li><a th:href="@{/certificados}">Certificados</a><span>Acreditación al finalizar</span></li>
+                <li><a th:href="@{/recibos}">Recibos</a><span>Justificante de cada pago</span></li>
+            </ul>
+        </section>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: pie}"></footer>
+</body>
+</html>

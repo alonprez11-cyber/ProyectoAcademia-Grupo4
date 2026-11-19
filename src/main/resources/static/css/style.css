@@ -1,0 +1,148 @@
+/* ==========================================================
+   Estilos comunes de Academia
+   Paleta: pizarra (verde oscuro), tiza (amarillo), papel (gris claro)
+   ========================================================== */
+:root {
+    --pizarra: #1f3b33;
+    --pizarra-claro: #2c5246;
+    --tiza: #e9c46a;
+    --papel: #f2f4f3;
+    --blanco: #ffffff;
+    --tinta: #1b2420;
+    --gris: #5d6b65;
+    --linea: #d3dad6;
+    --peligro: #a63d2f;
+    --peligro-fondo: #f8e4e0;
+    --exito: #2f6b3f;
+    --exito-fondo: #e1f0e4;
+    --radio: 4px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--tinta);
+    background: var(--papel);
+}
+
+h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; line-height: 1.2; margin: 0 0 .5rem; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.25rem; }
+
+a { color: var(--pizarra-claro); }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline: 3px solid var(--tiza);
+    outline-offset: 2px;
+}
+
+/* ---------- Cabecera y menú ---------- */
+.cabecera { background: var(--pizarra); color: var(--blanco); border-bottom: 4px solid var(--tiza); }
+.cabecera-interior {
+    max-width: 1200px; margin: 0 auto; padding: .75rem 1.25rem;
+    display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+}
+.marca { font-family: Georgia, serif; font-size: 1.5rem; font-weight: bold; color: var(--blanco); text-decoration: none; }
+.menu ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .25rem; }
+.menu .grupo-inicio { margin-left: .75rem; padding-left: .75rem; border-left: 1px solid rgba(255,255,255,.25); }
+.menu .grupo-inicio:first-child { margin-left: 0; padding-left: 0; border-left: 0; }
+.menu a {
+    display: block; padding: .35rem .6rem; color: var(--blanco);
+    text-decoration: none; border-bottom: 3px solid transparent;
+}
+.menu a:hover { background: var(--pizarra-claro); }
+.menu a.activo { border-bottom-color: var(--tiza); font-weight: 600; }
+
+/* ---------- Contenido y pie ---------- */
+.contenedor { flex: 1; width: 100%; max-width: 1200px; margin: 0 auto; padding: 2rem 1.25rem; }
+.intro { color: var(--gris); margin: 0 0 1.5rem; }
+.pie { background: var(--pizarra); color: rgba(255,255,255,.8); text-align: center; padding: 1rem; font-size: .875rem; }
+.pie p { margin: 0; }
+
+/* ---------- Portada ---------- */
+.areas { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2rem; }
+.areas h2 { border-bottom: 2px solid var(--pizarra); padding-bottom: .25rem; margin-bottom: .75rem; }
+.enlaces { list-style: none; margin: 0; padding: 0; }
+.enlaces li { padding: .5rem 0; border-bottom: 1px solid var(--linea); }
+.enlaces a { font-weight: 600; display: block; }
+.enlaces span { color: var(--gris); font-size: .875rem; }
+
+/* ---------- Título de página + botón "Nuevo" ---------- */
+.barra-titulo { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.barra-titulo h1 { margin: 0; }
+
+/* ---------- Botones ---------- */
+.btn {
+    display: inline-block; padding: .5rem 1rem; border: 1px solid transparent; border-radius: var(--radio);
+    font: inherit; font-weight: 600; text-decoration: none; cursor: pointer; line-height: 1.3;
+}
+.btn-primario { background: var(--pizarra); color: var(--blanco); }
+.btn-primario:hover { background: var(--pizarra-claro); }
+.btn-secundario { background: var(--blanco); color: var(--pizarra); border-color: var(--pizarra); }
+.btn-secundario:hover { background: var(--papel); }
+.btn-peligro { background: var(--blanco); color: var(--peligro); border-color: var(--peligro); }
+.btn-peligro:hover { background: var(--peligro-fondo); }
+.btn-pequeno { padding: .25rem .6rem; font-size: .875rem; }
+
+/* ---------- Tablas de listado ---------- */
+.tabla-contenedor { overflow-x: auto; background: var(--blanco); border: 1px solid var(--linea); }
+.tabla { width: 100%; border-collapse: collapse; }
+.tabla th, .tabla td { padding: .65rem .85rem; text-align: left; border-bottom: 1px solid var(--linea); vertical-align: middle; }
+.tabla thead th { background: var(--pizarra); color: var(--blanco); font-weight: 600; white-space: nowrap; }
+.tabla tbody tr:hover { background: var(--papel); }
+.tabla .acciones { display: flex; gap: .4rem; white-space: nowrap; }
+.tabla .acciones form { margin: 0; }
+.tabla .num { text-align: right; font-variant-numeric: tabular-nums; }
+.vacio { padding: 2rem; text-align: center; color: var(--gris); background: var(--blanco); border: 1px dashed var(--linea); }
+
+/* Imágenes subidas (foto de profesor, etc.) */
+.miniatura { width: 48px; height: 48px; object-fit: cover; border-radius: 50%; border: 1px solid var(--linea); }
+.imagen-ficha { max-width: 220px; max-height: 220px; object-fit: cover; border: 1px solid var(--linea); border-radius: var(--radio); }
+
+/* Etiquetas para booleanos / estados: <span class="insignia insignia-si">Sí</span> */
+.insignia { display: inline-block; padding: .1rem .5rem; border-radius: 999px; font-size: .8125rem; font-weight: 600; }
+.insignia-si { background: var(--exito-fondo); color: var(--exito); }
+.insignia-no { background: #e8eaea; color: var(--gris); }
+
+/* ---------- Formularios ---------- */
+.formulario { max-width: 640px; background: var(--blanco); border: 1px solid var(--linea); padding: 1.5rem; }
+.campo { margin-bottom: 1.1rem; }
+.campo label { display: block; font-weight: 600; margin-bottom: .25rem; }
+.campo input[type="text"], .campo input[type="email"], .campo input[type="number"],
+.campo input[type="date"], .campo input[type="datetime-local"], .campo input[type="file"],
+.campo select, .campo textarea {
+    width: 100%; padding: .5rem .65rem; font: inherit; color: inherit;
+    background: var(--blanco); border: 1px solid #98a49e; border-radius: var(--radio);
+}
+.campo input[type="checkbox"] { width: 1.1rem; height: 1.1rem; margin-right: .4rem; vertical-align: middle; }
+.campo .campo-check label { display: inline; font-weight: 600; }
+.campo.con-error input, .campo.con-error select, .campo.con-error textarea { border-color: var(--peligro); background: #fff8f7; }
+.ayuda { display: block; margin-top: .2rem; font-size: .875rem; color: var(--gris); }
+.error-campo { display: block; margin-top: .25rem; font-size: .875rem; font-weight: 600; color: var(--peligro); }
+.formulario .botones { display: flex; gap: .75rem; margin-top: 1.5rem; }
+
+/* ---------- Avisos ---------- */
+.aviso { padding: .75rem 1rem; margin-bottom: 1.25rem; border-left: 4px solid; border-radius: var(--radio); font-weight: 600; }
+.aviso-exito { background: var(--exito-fondo); color: var(--exito); border-color: var(--exito); }
+.aviso-error { background: var(--peligro-fondo); color: var(--peligro); border-color: var(--peligro); }
+
+/* ---------- Ficha de detalle (opcional) ---------- */
+.detalle { display: grid; grid-template-columns: max-content 1fr; gap: .4rem 1.5rem; }
+.detalle dt { font-weight: 600; color: var(--gris); }
+.detalle dd { margin: 0; }
+
+@media (max-width: 640px) {
+    h1 { font-size: 1.5rem; }
+    .menu .grupo-inicio { margin-left: 0; padding-left: 0; border-left: 0; }
+    .formulario { padding: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+}

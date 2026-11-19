@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<!--
+  ============================================================
+  FRAGMENTOS COMUNES — usadlos en TODAS las pantallas
+  ============================================================
+  Esqueleto de cualquier página:
+
+  <!DOCTYPE html>
+  <html lang="es" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{fragments/layout :: head('Alumnos')}"></head>
+  <body>
+  <header th:replace="~{fragments/layout :: cabecera('alumnos')}"></header>
+  <main class="contenedor">
+      <div th:replace="~{fragments/layout :: avisos}"></div>
+      ... contenido ...
+  </main>
+  <footer th:replace="~{fragments/layout :: pie}"></footer>
+  </body>
+  </html>
+
+  El parámetro de 'cabecera' marca la opción activa del menú:
+  alumnos | matriculas | pagos | cursos | profesores | aulas |
+  examenes | evaluaciones | certificados | recibos
+-->
+
+<!-- Metadatos, título de la pestaña y hoja de estilos -->
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${titulo} + ' · Academia'">Academia</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<!-- Cabecera con el menú de todas las entidades -->
+<header class="cabecera" th:fragment="cabecera(activo)">
+    <div class="cabecera-interior">
+        <a class="marca" th:href="@{/}">Academia</a>
+        <nav class="menu" aria-label="Secciones">
+            <ul>
+                <li class="grupo-inicio"><a th:href="@{/alumnos}" th:classappend="${activo == 'alumnos'} ? 'activo'">Alumnos</a></li>
+                <li><a th:href="@{/matriculas}" th:classappend="${activo == 'matriculas'} ? 'activo'">Matrículas</a></li>
+                <li><a th:href="@{/pagos}" th:classappend="${activo == 'pagos'} ? 'activo'">Pagos</a></li>
+
+                <li class="grupo-inicio"><a th:href="@{/cursos}" th:classappend="${activo == 'cursos'} ? 'activo'">Cursos</a></li>
+                <li><a th:href="@{/profesores}" th:classappend="${activo == 'profesores'} ? 'activo'">Profesores</a></li>
+                <li><a th:href="@{/aulas}" th:classappend="${activo == 'aulas'} ? 'activo'">Aulas</a></li>
+
+                <li class="grupo-inicio"><a th:href="@{/examenes}" th:classappend="${activo == 'examenes'} ? 'activo'">Exámenes</a></li>
+                <li><a th:href="@{/evaluaciones}" th:classappend="${activo == 'evaluaciones'} ? 'activo'">Evaluaciones</a></li>
+                <li><a th:href="@{/certificados}" th:classappend="${activo == 'certificados'} ? 'activo'">Certificados</a></li>
+                <li><a th:href="@{/recibos}" th:classappend="${activo == 'recibos'} ? 'activo'">Recibos</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<!--
+  Mensajes de resultado. En el controlador, tras guardar o borrar:
+      redirectAttributes.addFlashAttribute("exito", "Alumno guardado correctamente.");
+      redirectAttributes.addFlashAttribute("error", "No se puede borrar: tiene matrículas.");
+-->
+<div th:fragment="avisos">
+    <div class="aviso aviso-exito" role="status" th:if="${exito}" th:text="${exito}"></div>
+    <div class="aviso aviso-error" role="alert" th:if="${error}" th:text="${error}"></div>
+</div>
+
+<!--
+  Resumen de errores de un formulario (opcional, además del mensaje bajo cada campo).
+  Dentro de un <form th:object="${alumno}">:
+      <div th:replace="~{fragments/layout :: resumenErrores}"></div>
+-->
+<div class="aviso aviso-error" role="alert" th:fragment="resumenErrores" th:if="${#fields.hasAnyErrors()}">
+    Revisa el formulario: hay campos con errores.
+</div>
+
+<!-- Pie de página -->
+<footer class="pie" th:fragment="pie">
+    <p>Academia · Proyecto grupal DAW2 · Grupo 4</p>
+</footer>
+
+</body>
+</html>

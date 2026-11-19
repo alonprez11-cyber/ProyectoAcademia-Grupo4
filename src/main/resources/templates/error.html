@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Error')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: cabecera('')}"></header>
+
+<main class="contenedor">
+    <h1>Algo ha salido mal</h1>
+    <p class="intro">
+        <span th:if="${status == 404}">La página que buscas no existe (todavía).</span>
+        <span th:if="${status == 413}">El fichero es demasiado grande. El máximo es 5 MB.</span>
+        <span th:if="${status != 404 and status != 413}">Ha ocurrido un error inesperado (código <span th:text="${status}">500</span>).</span>
+    </p>
+    <a class="btn btn-secundario" th:href="@{/}">Volver al inicio</a>
+</main>
+
+<footer th:replace="~{fragments/layout :: pie}"></footer>
+</body>
+</html>
