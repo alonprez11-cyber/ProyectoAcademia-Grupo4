@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Alumnos')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: cabecera('alumnos')}"></header>
+
+<main class="contenedor">
+    <div class="barra-titulo">
+        <h1>Alumnos</h1>
+        <a class="btn btn-primario" th:href="@{/alumnos/nuevo}">Nuevo alumno</a>
+    </div>
+
+    <div th:replace="~{fragments/layout :: avisos}"></div>
+
+    <p class="vacio" th:if="${#lists.isEmpty(alumnos)}">Todavía no hay alumnos. Crea el primero con «Nuevo alumno».</p>
+
+    <div class="tabla-contenedor" th:unless="${#lists.isEmpty(alumnos)}">
+        <table class="tabla">
+            <thead>
+            <tr>
+                <th>DNI</th>
+                <th>Alumno</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Nacimiento</th>
+                <th>Activo</th>
+                <th class="num">Matrículas</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="a : ${alumnos}">
+                <td th:text="${a.dni}">12345678Z</td>
+                <td th:text="${a.nombreCompleto}">García López, Ana</td>
+                <td th:text="${a.email}">ana@correo.es</td>
+                <td th:text="${a.telefono}">600123456</td>
+                <td th:text="${#temporals.format(a.fechaNacimiento, 'dd/MM/yyyy')}">01/01/2000</td>
+                <td>
+                    <span class="insignia insignia-si" th:if="${a.activo}">Sí</span>
+                    <span class="insignia insignia-no" th:unless="${a.activo}">No</span>
+                </td>
+                <td class="num" th:text="${#lists.size(a.matriculas)}">0</td>
+                <td>
+                    <div class="acciones">
+                        <a class="btn btn-secundario btn-pequeno" th:href="@{/alumnos/{id}/editar(id=${a.id})}">Editar</a>
+                        <form th:action="@{/alumnos/{id}/eliminar(id=${a.id})}" method="post"
+                              onsubmit="return confirm('¿Eliminar este alumno?');">
+                            <button type="submit" class="btn btn-peligro btn-pequeno">Eliminar</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: pie}"></footer>
+</body>
+</html>

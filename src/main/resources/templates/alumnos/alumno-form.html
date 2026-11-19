@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${alumno.id == null ? 'Nuevo alumno' : 'Editar alumno'})}"></head>
+<body>
+<header th:replace="~{fragments/layout :: cabecera('alumnos')}"></header>
+
+<main class="contenedor">
+    <h1 th:text="${alumno.id == null ? 'Nuevo alumno' : 'Editar alumno'}">Nuevo alumno</h1>
+
+    <form class="formulario" th:action="@{/alumnos/guardar}" th:object="${alumno}" method="post" novalidate>
+        <div th:replace="~{fragments/layout :: resumenErrores}"></div>
+
+        <input type="hidden" th:field="*{id}">
+
+        <div class="campo" th:classappend="${#fields.hasErrors('dni')} ? 'con-error'">
+            <label for="dni">DNI</label>
+            <input type="text" id="dni" th:field="*{dni}" maxlength="9" placeholder="12345678Z">
+            <span class="error-campo" th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}"></span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('nombre')} ? 'con-error'">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" th:field="*{nombre}">
+            <span class="error-campo" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('apellidos')} ? 'con-error'">
+            <label for="apellidos">Apellidos</label>
+            <input type="text" id="apellidos" th:field="*{apellidos}">
+            <span class="error-campo" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}"></span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('email')} ? 'con-error'">
+            <label for="email">Email</label>
+            <input type="email" id="email" th:field="*{email}">
+            <span class="error-campo" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('telefono')} ? 'con-error'">
+            <label for="telefono">Teléfono</label>
+            <input type="tel" id="telefono" th:field="*{telefono}" maxlength="9" placeholder="600123456">
+            <span class="error-campo" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('fechaNacimiento')} ? 'con-error'">
+            <label for="fechaNacimiento">Fecha de nacimiento</label>
+            <input type="date" id="fechaNacimiento" th:field="*{fechaNacimiento}">
+            <span class="error-campo" th:if="${#fields.hasErrors('fechaNacimiento')}" th:errors="*{fechaNacimiento}"></span>
+        </div>
+
+        <div class="campo">
+            <div class="campo-check">
+                <input type="checkbox" id="activo" th:field="*{activo}">
+                <label for="activo">Alumno activo</label>
+            </div>
+        </div>
+
+        <div class="botones">
+            <button type="submit" class="btn btn-primario">Guardar alumno</button>
+            <a class="btn btn-secundario" th:href="@{/alumnos}">Cancelar</a>
+        </div>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/layout :: pie}"></footer>
+</body>
+</html>
