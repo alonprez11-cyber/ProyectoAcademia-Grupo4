@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${pago.id == null ? 'Nuevo pago' : 'Editar pago'})}"></head>
+<body>
+<header th:replace="~{fragments/layout :: cabecera('pagos')}"></header>
+
+<main class="contenedor">
+    <h1 th:text="${pago.id == null ? 'Nuevo pago' : 'Editar pago'}">Nuevo pago</h1>
+
+    <form class="formulario" th:action="@{/pagos/guardar}" th:object="${pago}" method="post" novalidate>
+        <div th:replace="~{fragments/layout :: resumenErrores}"></div>
+
+        <input type="hidden" th:field="*{id}">
+
+        <div class="campo" th:classappend="${#fields.hasErrors('referencia')} ? 'con-error'">
+            <label for="referencia">Referencia</label>
+            <input type="text" id="referencia" th:field="*{referencia}" maxlength="10" placeholder="PAG-000123">
+            <span class="ayuda">PAG- seguido de 6 números. No puede repetirse.</span>
+            <span class="error-campo" th:if="${#fields.hasErrors('referencia')}" th:errors="*{referencia}"></span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('matricula.id')} ? 'con-error'">
+            <label for="matricula">Matrícula</label>
+            <select id="matricula" th:field="*{matricula.id}">
+                <option value="">Selecciona una matrícula</option>
+                <option th:each="m : ${matriculas}" th:value="${m.id}" th:text="${m.descripcion}">MAT-00001 · García López, Ana · Inglés B2</option>
+            </select>
+            <span class="error-campo" th:if="${#fields.hasErrors('matricula.id')}" th:errors="*{matricula.id}"></span>
+            <span class="ayuda" th:if="${#lists.isEmpty(matriculas)}">No hay matrículas. <a th:href="@{/matriculas/nuevo}">Crea una primero</a>.</span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('importe')} ? 'con-error'">
+            <label for="importe">Importe (€)</label>
+            <input type="number" id="importe" th:field="*{importe}" step="0.01" min="0">
+            <span class="error-campo" th:if="${#fields.hasErrors('importe')}" th:errors="*{importe}"></span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('fecha')} ? 'con-error'">
+            <label for="fecha">Fecha del pago</label>
+            <input type="date" id="fecha" th:field="*{fecha}">
+            <span class="error-campo" th:if="${#fields.hasErrors('fecha')}" th:errors="*{fecha}"></span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('metodo')} ? 'con-error'">
+            <label for="metodo">Método de pago</label>
+            <select id="metodo" th:field="*{metodo}">
+                <option value="">Selecciona un método</option>
+                <option th:each="m : ${metodos}" th:value="${m}" th:text="${m.etiqueta}">Tarjeta</option>
+            </select>
+            <span class="error-campo" th:if="${#fields.hasErrors('metodo')}" th:errors="*{metodo}"></span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('estado')} ? 'con-error'">
+            <label for="estado">Estado</label>
+            <select id="estado" th:field="*{estado}">
+                <option value="">Selecciona un estado</option>
+                <option th:each="e : ${estados}" th:value="${e}" th:text="${e.etiqueta}">Completado</option>
+            </select>
+            <span class="error-campo" th:if="${#fields.hasErrors('estado')}" th:errors="*{estado}"></span>
+        </div>
+
+        <div class="botones">
+            <button type="submit" class="btn btn-primario">Guardar pago</button>
+            <a class="btn btn-secundario" th:href="@{/pagos}">Cancelar</a>
+        </div>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/layout :: pie}"></footer>
+</body>
+</html>

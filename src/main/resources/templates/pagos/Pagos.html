@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Pagos')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: cabecera('pagos')}"></header>
+
+<main class="contenedor">
+    <div class="barra-titulo">
+        <h1>Pagos</h1>
+        <a class="btn btn-primario" th:href="@{/pagos/nuevo}">Nuevo pago</a>
+    </div>
+
+    <div th:replace="~{fragments/layout :: avisos}"></div>
+
+    <p class="vacio" th:if="${#lists.isEmpty(pagos)}">Todavía no hay pagos. Registra el primero con «Nuevo pago».</p>
+
+    <div class="tabla-contenedor" th:unless="${#lists.isEmpty(pagos)}">
+        <table class="tabla">
+            <thead>
+            <tr>
+                <th>Referencia</th>
+                <th>Matrícula</th>
+                <th class="num">Importe</th>
+                <th>Fecha</th>
+                <th>Método</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="p : ${pagos}">
+                <td th:text="${p.referencia}">PAG-000123</td>
+                <td th:text="${p.matricula.descripcion}">MAT-00001 · García López, Ana · Inglés B2</td>
+                <td class="num" th:text="${#numbers.formatDecimal(p.importe, 1, 'POINT', 2, 'COMMA') + ' €'}">120,00 €</td>
+                <td th:text="${#temporals.format(p.fecha, 'dd/MM/yyyy')}">01/09/2026</td>
+                <td th:text="${p.metodo.etiqueta}">Tarjeta</td>
+                <td>
+                        <span class="insignia" th:classappend="${p.estado.name() == 'COMPLETADO'} ? 'insignia-si' : 'insignia-no'"
+                              th:text="${p.estado.etiqueta}">Completado</span>
+                </td>
+                <td>
+                    <div class="acciones">
+                        <a class="btn btn-secundario btn-pequeno" th:href="@{/pagos/{id}/editar(id=${p.id})}">Editar</a>
+                        <form th:action="@{/pagos/{id}/eliminar(id=${p.id})}" method="post"
+                              onsubmit="return confirm('¿Eliminar este pago?');">
+                            <button type="submit" class="btn btn-peligro btn-pequeno">Eliminar</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: pie}"></footer>
+</body>
+</html>
