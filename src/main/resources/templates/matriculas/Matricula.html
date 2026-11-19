@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Matrículas')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: cabecera('matriculas')}"></header>
+
+<main class="contenedor">
+    <div class="barra-titulo">
+        <h1>Matrículas</h1>
+        <a class="btn btn-primario" th:href="@{/matriculas/nuevo}">Nueva matrícula</a>
+    </div>
+
+    <div th:replace="~{fragments/layout :: avisos}"></div>
+
+    <p class="vacio" th:if="${#lists.isEmpty(matriculas)}">Todavía no hay matrículas. Crea la primera con «Nueva matrícula».</p>
+
+    <div class="tabla-contenedor" th:unless="${#lists.isEmpty(matriculas)}">
+        <table class="tabla">
+            <thead>
+            <tr>
+                <th>Código</th>
+                <th>Alumno</th>
+                <th>Curso</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th class="num">Pagos</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="m : ${matriculas}">
+                <td th:text="${m.codigo}">MAT-00001</td>
+                <td th:text="${m.alumno.nombreCompleto}">García López, Ana</td>
+                <td th:text="${m.curso.nombre}">Inglés B2</td>
+                <td th:text="${#temporals.format(m.fechaMatricula, 'dd/MM/yyyy')}">01/09/2026</td>
+                <td>
+                        <span class="insignia" th:classappend="${m.estado.name() == 'ACTIVA'} ? 'insignia-si' : 'insignia-no'"
+                              th:text="${m.estado.etiqueta}">Activa</span>
+                </td>
+                <td class="num" th:text="${#lists.size(m.pagos)}">0</td>
+                <td>
+                    <div class="acciones">
+                        <a class="btn btn-secundario btn-pequeno" th:href="@{/matriculas/{id}/editar(id=${m.id})}">Editar</a>
+                        <form th:action="@{/matriculas/{id}/eliminar(id=${m.id})}" method="post"
+                              onsubmit="return confirm('¿Eliminar esta matrícula?');">
+                            <button type="submit" class="btn btn-peligro btn-pequeno">Eliminar</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: pie}"></footer>
+</body>
+</html>
