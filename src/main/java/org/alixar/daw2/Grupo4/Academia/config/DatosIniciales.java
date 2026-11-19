@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * TEMPORAL: crea dos cursos de ejemplo si no hay ninguno, para probar matrículas
- * antes de que exista el CRUD de cursos. Borrad esta clase cuando Persona 2 lo haya subido.
+ * antes de que exista el CRUD de cursos.
  */
 @Configuration
 public class DatosIniciales {
