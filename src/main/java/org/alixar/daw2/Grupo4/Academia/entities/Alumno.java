@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "alumnos")
+@Table(name = "alumno")
 @Getter
 @Setter
 @NoArgsConstructor
