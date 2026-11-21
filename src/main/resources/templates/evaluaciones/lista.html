@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Evaluaciones')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: cabecera('evaluaciones')}"></header>
+
+<main class="contenedor">
+    <div class="barra-titulo">
+        <h1>Evaluaciones</h1>
+        <a class="btn btn-primario" th:href="@{/evaluaciones/nuevo}">Nueva evaluación</a>
+    </div>
+
+    <div th:replace="~{fragments/layout :: avisos}"></div>
+
+    <p class="vacio" th:if="${#lists.isEmpty(evaluaciones)}">Todavía no hay evaluaciones. Registra la primera con «Nueva evaluación».</p>
+
+    <div class="tabla-contenedor" th:unless="${#lists.isEmpty(evaluaciones)}">
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Alumno</th>
+                    <th>Examen</th>
+                    <th>Fecha</th>
+                    <th class="num">Nota</th>
+                    <th>Observaciones</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="e : ${evaluaciones}">
+                    <td th:text="${e.alumno.nombreCompleto}">García López, Ana</td>
+                    <td th:text="${e.examen.descripcion}">Examen final · Inglés B2</td>
+                    <td th:text="${#temporals.format(e.fecha, 'dd/MM/yyyy')}">15/06/2027</td>
+                    <td class="num" th:text="${#numbers.formatDecimal(e.nota, 1, 'POINT', 2, 'COMMA') + ' / ' + #numbers.formatDecimal(e.examen.notaMaxima, 1, 'POINT', 2, 'COMMA')}">8,50 / 10,00</td>
+                    <td th:text="${e.observaciones}">—</td>
+                    <td>
+                        <div class="acciones">
+                            <a class="btn btn-secundario btn-pequeno" th:href="@{/evaluaciones/{id}/editar(id=${e.id})}">Editar</a>
+                            <form th:action="@{/evaluaciones/{id}/eliminar(id=${e.id})}" method="post"
+                                  onsubmit="return confirm('¿Eliminar esta evaluación?');">
+                                <button type="submit" class="btn btn-peligro btn-pequeno">Eliminar</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: pie}"></footer>
+</body>
+</html>

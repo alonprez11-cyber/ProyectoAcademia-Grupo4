@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${evaluacion.id == null ? 'Nueva evaluación' : 'Editar evaluación'})}"></head>
+<body>
+<header th:replace="~{fragments/layout :: cabecera('evaluaciones')}"></header>
+
+<main class="contenedor">
+    <h1 th:text="${evaluacion.id == null ? 'Nueva evaluación' : 'Editar evaluación'}">Nueva evaluación</h1>
+
+    <form class="formulario" th:action="@{/evaluaciones/guardar}" th:object="${evaluacion}" method="post" novalidate>
+        <div th:replace="~{fragments/layout :: resumenErrores}"></div>
+
+        <input type="hidden" th:field="*{id}">
+
+        <div class="campo" th:classappend="${#fields.hasErrors('examen.id')} ? 'con-error'">
+            <label for="examen">Examen</label>
+            <select id="examen" th:field="*{examen.id}">
+                <option value="">Selecciona un examen</option>
+                <option th:each="e : ${examenes}" th:value="${e.id}"
+                        th:text="${e.descripcion + ' (máx. ' + e.notaMaxima + ')'}">Examen final · Inglés B2 (máx. 10.00)</option>
+            </select>
+            <span class="error-campo" th:if="${#fields.hasErrors('examen.id')}" th:errors="*{examen.id}"></span>
+            <span class="ayuda" th:if="${#lists.isEmpty(examenes)}">No hay exámenes. <a th:href="@{/examenes/nuevo}">Crea uno primero</a>.</span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('alumno.id')} ? 'con-error'">
+            <label for="alumno">Alumno</label>
+            <select id="alumno" th:field="*{alumno.id}">
+                <option value="">Selecciona un alumno</option>
+                <option th:each="a : ${alumnos}" th:value="${a.id}"
+                        th:text="${a.nombreCompleto + ' (' + a.dni + ')'}">García López, Ana (12345678Z)</option>
+            </select>
+            <span class="ayuda">Debe estar matriculado en el curso del examen.</span>
+            <span class="error-campo" th:if="${#fields.hasErrors('alumno.id')}" th:errors="*{alumno.id}"></span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('nota')} ? 'con-error'">
+            <label for="nota">Nota</label>
+            <input type="number" id="nota" th:field="*{nota}" step="0.01" min="0">
+            <span class="ayuda">Entre 0 y la nota máxima del examen.</span>
+            <span class="error-campo" th:if="${#fields.hasErrors('nota')}" th:errors="*{nota}"></span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('fecha')} ? 'con-error'">
+            <label for="fecha">Fecha de la evaluación</label>
+            <input type="date" id="fecha" th:field="*{fecha}">
+            <span class="error-campo" th:if="${#fields.hasErrors('fecha')}" th:errors="*{fecha}"></span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('observaciones')} ? 'con-error'">
+            <label for="observaciones">Observaciones (opcional)</label>
+            <textarea id="observaciones" th:field="*{observaciones}" rows="3"></textarea>
+            <span class="error-campo" th:if="${#fields.hasErrors('observaciones')}" th:errors="*{observaciones}"></span>
+        </div>
+
+        <div class="botones">
+            <button type="submit" class="btn btn-primario">Guardar evaluación</button>
+            <a class="btn btn-secundario" th:href="@{/evaluaciones}">Cancelar</a>
+        </div>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/layout :: pie}"></footer>
+</body>
+</html>
