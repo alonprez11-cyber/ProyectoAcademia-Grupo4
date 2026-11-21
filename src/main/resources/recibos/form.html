@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${recibo.id == null ? 'Nuevo recibo' : 'Editar recibo'})}"></head>
+<body>
+<header th:replace="~{fragments/layout :: cabecera('recibos')}"></header>
+
+<main class="contenedor">
+    <h1 th:text="${recibo.id == null ? 'Nuevo recibo' : 'Editar recibo'}">Nuevo recibo</h1>
+
+    <form class="formulario" th:action="@{/recibos/guardar}" th:object="${recibo}" method="post" novalidate>
+        <div th:replace="~{fragments/layout :: resumenErrores}"></div>
+
+        <input type="hidden" th:field="*{id}">
+
+        <div class="campo" th:classappend="${#fields.hasErrors('numero')} ? 'con-error'">
+            <label for="numero">Número</label>
+            <input type="text" id="numero" th:field="*{numero}" maxlength="10" placeholder="RCB-000001">
+            <span class="ayuda">RCB- seguido de 6 números. No puede repetirse.</span>
+            <span class="error-campo" th:if="${#fields.hasErrors('numero')}" th:errors="*{numero}"></span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('pago.id')} ? 'con-error'">
+            <label for="pago">Pago</label>
+            <select id="pago" th:field="*{pago.id}">
+                <option value="">Selecciona un pago</option>
+                <option th:each="p : ${pagos}" th:value="${p.id}"
+                        th:text="${p.referencia + ' · ' + p.matricula.descripcion + ' · ' + p.estado.etiqueta}">PAG-000123 · MAT-00001 · García López, Ana · Inglés B2 · Completado</option>
+            </select>
+            <span class="ayuda">Solo pagos completados; cada pago tiene como mucho un recibo.</span>
+            <span class="error-campo" th:if="${#fields.hasErrors('pago.id')}" th:errors="*{pago.id}"></span>
+            <span class="ayuda" th:if="${#lists.isEmpty(pagos)}">No hay pagos. <a th:href="@{/pagos/nuevo}">Registra uno primero</a>.</span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('importe')} ? 'con-error'">
+            <label for="importe">Importe (€)</label>
+            <input type="number" id="importe" th:field="*{importe}" step="0.01" min="0">
+            <span class="ayuda">Debe coincidir con el importe del pago.</span>
+            <span class="error-campo" th:if="${#fields.hasErrors('importe')}" th:errors="*{importe}"></span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('concepto')} ? 'con-error'">
+            <label for="concepto">Concepto</label>
+            <input type="text" id="concepto" th:field="*{concepto}">
+            <span class="error-campo" th:if="${#fields.hasErrors('concepto')}" th:errors="*{concepto}"></span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('fechaEmision')} ? 'con-error'">
+            <label for="fechaEmision">Fecha de emisión</label>
+            <input type="date" id="fechaEmision" th:field="*{fechaEmision}">
+            <span class="error-campo" th:if="${#fields.hasErrors('fechaEmision')}" th:errors="*{fechaEmision}"></span>
+        </div>
+
+        <div class="botones">
+            <button type="submit" class="btn btn-primario">Guardar recibo</button>
+            <a class="btn btn-secundario" th:href="@{/recibos}">Cancelar</a>
+        </div>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/layout :: pie}"></footer>
+</body>
+</html>

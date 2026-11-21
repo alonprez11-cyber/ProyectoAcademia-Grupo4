@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Recibos')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: cabecera('recibos')}"></header>
+
+<main class="contenedor">
+    <div class="barra-titulo">
+        <h1>Recibos</h1>
+        <a class="btn btn-primario" th:href="@{/recibos/nuevo}">Nuevo recibo</a>
+    </div>
+
+    <div th:replace="~{fragments/layout :: avisos}"></div>
+
+    <p class="vacio" th:if="${#lists.isEmpty(recibos)}">Todavía no hay recibos.</p>
+
+    <div class="tabla-contenedor" th:unless="${#lists.isEmpty(recibos)}">
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Número</th>
+                    <th>Pago</th>
+                    <th>Concepto</th>
+                    <th class="num">Importe</th>
+                    <th>Fecha de emisión</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="r : ${recibos}">
+                    <td th:text="${r.numero}">RCB-000001</td>
+                    <td th:text="${r.pago.referencia}">PAG-000123</td>
+                    <td th:text="${r.concepto}">Pago PAG-000123 de la matrícula MAT-00001</td>
+                    <td class="num" th:text="${#numbers.formatDecimal(r.importe, 1, 'POINT', 2, 'COMMA') + ' €'}">120,00 €</td>
+                    <td th:text="${#temporals.format(r.fechaEmision, 'dd/MM/yyyy')}">01/09/2026</td>
+                    <td>
+                        <div class="acciones">
+                            <a class="btn btn-secundario btn-pequeno" th:href="@{/recibos/{id}/editar(id=${r.id})}">Editar</a>
+                            <form th:action="@{/recibos/{id}/eliminar(id=${r.id})}" method="post"
+                                  onsubmit="return confirm('¿Eliminar este recibo?');">
+                                <button type="submit" class="btn btn-peligro btn-pequeno">Eliminar</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Generación rápida: pagos completados que todavía no tienen recibo -->
+    <section th:unless="${#lists.isEmpty(pendientes)}" style="margin-top: 2.5rem;">
+        <h2>Pagos completados sin recibo</h2>
+        <div class="tabla-contenedor">
+            <table class="tabla">
+                <thead>
+                    <tr><th>Pago</th><th>Matrícula</th><th class="num">Importe</th><th>Acciones</th></tr>
+                </thead>
+                <tbody>
+                    <tr th:each="p : ${pendientes}">
+                        <td th:text="${p.referencia}">PAG-000124</td>
+                        <td th:text="${p.matricula.descripcion}">MAT-00002 · Pérez Díaz, Luis · Programación Java</td>
+                        <td class="num" th:text="${#numbers.formatDecimal(p.importe, 1, 'POINT', 2, 'COMMA') + ' €'}">200,00 €</td>
+                        <td>
+                            <a class="btn btn-primario btn-pequeno" th:href="@{/recibos/nuevo(pagoId=${p.id})}">Generar recibo</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: pie}"></footer>
+</body>
+</html>
