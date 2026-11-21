@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${certificado.id == null ? 'Nuevo certificado' : 'Editar certificado'})}"></head>
+<body>
+<header th:replace="~{fragments/layout :: cabecera('certificados')}"></header>
+
+<main class="contenedor">
+    <h1 th:text="${certificado.id == null ? 'Nuevo certificado' : 'Editar certificado'}">Nuevo certificado</h1>
+
+    <form class="formulario" th:action="@{/certificados/guardar}" th:object="${certificado}" method="post" novalidate>
+        <div th:replace="~{fragments/layout :: resumenErrores}"></div>
+
+        <input type="hidden" th:field="*{id}">
+
+        <div class="campo" th:classappend="${#fields.hasErrors('codigo')} ? 'con-error'">
+            <label for="codigo">Código</label>
+            <input type="text" id="codigo" th:field="*{codigo}" maxlength="9" placeholder="CER-00001">
+            <span class="ayuda">CER- seguido de 5 números. No puede repetirse.</span>
+            <span class="error-campo" th:if="${#fields.hasErrors('codigo')}" th:errors="*{codigo}"></span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('matricula.id')} ? 'con-error'">
+            <label for="matricula">Matrícula</label>
+            <select id="matricula" th:field="*{matricula.id}">
+                <option value="">Selecciona una matrícula</option>
+                <option th:each="m : ${matriculas}" th:value="${m.id}" th:text="${m.descripcion}">MAT-00001 · García López, Ana · Inglés B2</option>
+            </select>
+            <span class="ayuda">Cada matrícula solo puede tener un certificado.</span>
+            <span class="error-campo" th:if="${#fields.hasErrors('matricula.id')}" th:errors="*{matricula.id}"></span>
+            <span class="ayuda" th:if="${#lists.isEmpty(matriculas)}">No hay matrículas. <a th:href="@{/matriculas/nuevo}">Crea una primero</a>.</span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('tipo')} ? 'con-error'">
+            <label for="tipo">Tipo</label>
+            <select id="tipo" th:field="*{tipo}">
+                <option value="">Selecciona un tipo</option>
+                <option th:each="t : ${tipos}" th:value="${t}" th:text="${t.etiqueta}">Asistencia</option>
+            </select>
+            <span class="error-campo" th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}"></span>
+        </div>
+
+        <div class="campo" th:classappend="${#fields.hasErrors('fechaEmision')} ? 'con-error'">
+            <label for="fechaEmision">Fecha de emisión</label>
+            <input type="date" id="fechaEmision" th:field="*{fechaEmision}">
+            <span class="error-campo" th:if="${#fields.hasErrors('fechaEmision')}" th:errors="*{fechaEmision}"></span>
+        </div>
+
+        <div class="botones">
+            <button type="submit" class="btn btn-primario">Guardar certificado</button>
+            <a class="btn btn-secundario" th:href="@{/certificados}">Cancelar</a>
+        </div>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/layout :: pie}"></footer>
+</body>
+</html>

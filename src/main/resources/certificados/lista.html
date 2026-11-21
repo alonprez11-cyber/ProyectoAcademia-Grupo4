@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Certificados')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: cabecera('certificados')}"></header>
+
+<main class="contenedor">
+    <div class="barra-titulo">
+        <h1>Certificados</h1>
+        <a class="btn btn-primario" th:href="@{/certificados/nuevo}">Nuevo certificado</a>
+    </div>
+
+    <div th:replace="~{fragments/layout :: avisos}"></div>
+
+    <p class="vacio" th:if="${#lists.isEmpty(certificados)}">Todavía no hay certificados.</p>
+
+    <div class="tabla-contenedor" th:unless="${#lists.isEmpty(certificados)}">
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Matrícula</th>
+                    <th>Tipo</th>
+                    <th>Fecha de emisión</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="c : ${certificados}">
+                    <td th:text="${c.codigo}">CER-00001</td>
+                    <td th:text="${c.matricula.descripcion}">MAT-00001 · García López, Ana · Inglés B2</td>
+                    <td th:text="${c.tipo.etiqueta}">Aprovechamiento</td>
+                    <td th:text="${#temporals.format(c.fechaEmision, 'dd/MM/yyyy')}">30/06/2027</td>
+                    <td>
+                        <div class="acciones">
+                            <a class="btn btn-secundario btn-pequeno" th:href="@{/certificados/{id}/editar(id=${c.id})}">Editar</a>
+                            <form th:action="@{/certificados/{id}/eliminar(id=${c.id})}" method="post"
+                                  onsubmit="return confirm('¿Eliminar este certificado?');">
+                                <button type="submit" class="btn btn-peligro btn-pequeno">Eliminar</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Generación rápida: matrículas (no canceladas) que todavía no tienen certificado -->
+    <section th:unless="${#lists.isEmpty(pendientes)}" style="margin-top: 2.5rem;">
+        <h2>Matrículas sin certificado</h2>
+        <div class="tabla-contenedor">
+            <table class="tabla">
+                <thead>
+                    <tr><th>Matrícula</th><th>Estado</th><th>Acciones</th></tr>
+                </thead>
+                <tbody>
+                    <tr th:each="m : ${pendientes}">
+                        <td th:text="${m.descripcion}">MAT-00002 · Pérez Díaz, Luis · Programación Java</td>
+                        <td th:text="${m.estado.etiqueta}">Activa</td>
+                        <td>
+                            <a class="btn btn-primario btn-pequeno" th:href="@{/certificados/nuevo(matriculaId=${m.id})}">Generar certificado</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: pie}"></footer>
+</body>
+</html>
