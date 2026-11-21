@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Exámenes')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: cabecera('examenes')}"></header>
+
+<main class="contenedor">
+    <div class="barra-titulo">
+        <h1>Exámenes</h1>
+        <a class="btn btn-primario" th:href="@{/examenes/nuevo}">Nuevo examen</a>
+    </div>
+
+    <div th:replace="~{fragments/layout :: avisos}"></div>
+
+    <p class="vacio" th:if="${#lists.isEmpty(examenes)}">Todavía no hay exámenes. Crea el primero con «Nuevo examen».</p>
+
+    <div class="tabla-contenedor" th:unless="${#lists.isEmpty(examenes)}">
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Curso</th>
+                    <th>Fecha</th>
+                    <th class="num">Nota máxima</th>
+                    <th class="num">Peso</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="e : ${examenes}">
+                    <td th:text="${e.titulo}">Examen final</td>
+                    <td th:text="${e.curso.nombre}">Inglés B2</td>
+                    <td th:text="${#temporals.format(e.fecha, 'dd/MM/yyyy')}">15/06/2027</td>
+                    <td class="num" th:text="${#numbers.formatDecimal(e.notaMaxima, 1, 'POINT', 2, 'COMMA')}">10,00</td>
+                    <td class="num" th:text="${e.porcentaje + ' %'}">50 %</td>
+                    <td>
+                        <div class="acciones">
+                            <a class="btn btn-secundario btn-pequeno" th:href="@{/examenes/{id}/editar(id=${e.id})}">Editar</a>
+                            <form th:action="@{/examenes/{id}/eliminar(id=${e.id})}" method="post"
+                                  onsubmit="return confirm('¿Eliminar este examen?');">
+                                <button type="submit" class="btn btn-peligro btn-pequeno">Eliminar</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: pie}"></footer>
+</body>
+</html>
